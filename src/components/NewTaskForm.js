@@ -1,56 +1,42 @@
-import React, { useState } from "react";
+import React,{useState} from "react";
 
-function NewTaskForm({ categories, onTaskFormSubmit }) {
-  // Initialize state to capture form inputs
-  const [formData, setFormData] = useState({
-    text: "",
-    category: categories[0], // Default to the first category
-  });
-
-  // Handle form input changes
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  // Handle form submission
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onTaskFormSubmit(formData); // Pass the form data to the parent component
-    setFormData({
-      text: "",
-      category: categories[0],
-    });
-  };
-
+function NewTaskForm({onTaskFormSubmit,categories}) {
+  
+  const [newItemFields, setNewItemFields]=useState({
+    text:'',
+    category:'Code'
+  })
+ 
+  function handleFields(e){
+    const{name,value}=e.target
+    setNewItemFields({...newItemFields,[name]:value})
+    
+  }
+  // console.log(newItemFields)
+  
+  
   return (
-    <form className="new-task-form" onSubmit={handleSubmit}>
+    <form
+    onSubmit={(e)=>{
+      e.preventDefault()
+      onTaskFormSubmit(newItemFields)}}
+    className="new-task-form"
+    >
       <label>
         Details
-        <input
-          type="text"
-          name="text"
-          value={formData.text}
-          onChange={handleInputChange}
-        />
+        <input value={newItemFields.text} onChange={handleFields}  type="text" name="text" />
       </label>
+
       <label>
         Category
-        <select
-          name="category"
-          value={formData.category}
-          onChange={handleInputChange}
-        >
-          {categories.slice(1).map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
+        <select value={newItemFields.category} onChange={handleFields} name="category">
+          {/* render <option> elements for each category here */}
+          {categories.map((category,index)=>(
+            <option key={index}>{category}</option>
           ))}
         </select>
       </label>
+
       <input type="submit" value="Add task" />
     </form>
   );
